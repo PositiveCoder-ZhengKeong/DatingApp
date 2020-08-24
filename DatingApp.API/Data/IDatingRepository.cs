@@ -11,5 +11,7 @@ namespace DatingApp.API.Data
         Task<bool> SaveAll();                   // Save all changes "OR" Save unsaved changes
         Task<IEnumerable<User>> GetUsers();     // Get Multiple Users
         Task<User> GetUser(int id);                   // Get Single User
+        Task<Photo> GetPhoto(int id);           // Get photo
+        Task<Photo> GetMainPhotoForUser(int userId);             // Get the current main photo
     }
 }
