@@ -24,7 +24,7 @@ export const appRoutes: Routes = [
             // notice the ":"
             {path: 'members/:id', component: MemberDetailComponent, resolve: {user : MemberDetailResolver}},
             {path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
-            {path: 'member/edit', component: MemberEditComponent, resolve: {user: MemberEditResolver}, 
+            {path: 'member/edit', component: MemberEditComponent, resolve: {user: MemberEditResolver},
                 canDeactivate: [PreventUnsavedChanges]},
             {path: 'messages', component: MessagesComponent}
         ]

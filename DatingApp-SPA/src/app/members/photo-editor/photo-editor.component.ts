@@ -64,6 +64,15 @@ export class PhotoEditorComponent implements OnInit {
           isMain: res.isMain
         };
         this.photos.push(photo);
+        
+        if (photo.isMain)
+        {
+          // change the photoUrl in the authservice (the centralize storage) via changeMemberPhoto function
+          this.authService.changeMemberPhoto(photo.url);
+          // change the current photo in the local storage to prevent unchanged photo when broswer refresh
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+        }
       }
     };
   }
@@ -78,7 +87,7 @@ export class PhotoEditorComponent implements OnInit {
       // this.getMemberPhotoChange.emit(photo.url);  // after this go to the parent component
       // change the photoUrl in the authservice (the centralize storage) via changeMemberPhoto function
       this.authService.changeMemberPhoto(photo.url);
-      // change the current photo in the local storage to preven unchanged photo when broswer refresh
+      // change the current photo in the local storage to prevent unchanged photo when broswer refresh
       this.authService.currentUser.photoUrl = photo.url;
       localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
     }, error => {

@@ -89,6 +89,7 @@ namespace DatingApp.API.Controllers
             // Map<destination>(source)
             var photo = _mapper.Map<Photo>(photoForCreationDto);
 
+            // if there is only one photo, makes it main
             if(!userFromRepo.Photos.Any(u => u.IsMain))
             {
                 photo.IsMain = true;
