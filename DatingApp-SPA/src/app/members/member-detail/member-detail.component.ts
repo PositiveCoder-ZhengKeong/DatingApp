@@ -14,6 +14,7 @@ export class MemberDetailComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  live: true;
 
   // activated route to retrieve the info from the route
   constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
