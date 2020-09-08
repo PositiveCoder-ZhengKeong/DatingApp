@@ -28,7 +28,7 @@ constructor(private http: HttpClient) { }
   //   return this.http.get<User>(this.baseUrl + 'user/' + id, httpOptions);
   // }
 
-  getUsers(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>>{
+  getUsers(page?, itemsPerPage?, userParams?, likeParams?): Observable<PaginatedResult<User[]>>{
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
     // submittin the request query
@@ -45,6 +45,16 @@ constructor(private http: HttpClient) { }
       params = params.append('maxAge', userParams.maxAge);
       params = params.append('gender', userParams.gender);
       params = params.append('orderBy', userParams.orderBy);
+    }
+
+    if (likeParams === 'Likers')
+    {
+      params = params.append('likers', 'true');
+    }
+
+    if (likeParams === 'Likees')
+    {
+      params = params.append('likees', 'true');
     }
 
     // user pipe to get "items" back from the response header
@@ -75,6 +85,10 @@ constructor(private http: HttpClient) { }
 
   deletePhoto(userId: number, id: number){
     return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
+  }
+
+  sendLike(userId: number, receipientId: number){
+    return this.http.post(this.baseUrl + 'user/' + userId + '/like/' + receipientId, {});
   }
 
 }

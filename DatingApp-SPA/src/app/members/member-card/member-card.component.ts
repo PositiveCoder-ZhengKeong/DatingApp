@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-member-card',
@@ -12,7 +13,7 @@ export class MemberCardComponent implements OnInit {
   @Input() user: User; // from parent member-list
   isMale = true;
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(private userService: UserService, private authService: AuthService, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.checkMale();
@@ -22,5 +23,13 @@ export class MemberCardComponent implements OnInit {
     if (this.user.gender === 'female') {
       this.isMale = false;
     }
+  }
+
+  sendLike(receipientId: number){
+    this.userService.sendLike(this.authService.decodedToken.nameid, receipientId).subscribe(data => {
+      this.alertify.success('You have liked: ' + this.user.knownAs);
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 }
