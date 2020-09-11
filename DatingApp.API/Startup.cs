@@ -32,7 +32,19 @@ namespace DatingApp.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            ConfigureServices(services);
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IAuthRepository, AuthRepository>();
@@ -41,7 +53,6 @@ namespace DatingApp.API
             services.AddAutoMapper(typeof(DatingRepository).Assembly);
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddCors();
-            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             // use newtonsoftson to serialize dotnet object to json object
             services.AddControllers().AddNewtonsoftJson(opt => 
             {
@@ -90,6 +101,10 @@ namespace DatingApp.API
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            // index.html in wwwroot
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             // check who you are
             app.UseAuthentication();
             // check what you can do
@@ -98,6 +113,7 @@ namespace DatingApp.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

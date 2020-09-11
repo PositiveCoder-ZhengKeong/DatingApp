@@ -5,6 +5,10 @@ namespace DatingApp.API.Data
 {
     public class DataContext: DbContext
     {
+        public DataContext(): base()
+        {
+            
+        }
         public DataContext(DbContextOptions<DataContext> options): base(options)
         {
             
@@ -42,6 +46,14 @@ namespace DatingApp.API.Data
                 .HasOne(u => u.Recipient)
                 .WithMany(m => m.MessagesReceived)
                 .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("Server=localhost; Database=datingapp; Uid=appuser; Pwd=password");
+            }
         }
     }
 }
